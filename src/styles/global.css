@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* Typography plugin styles for prose classes */
+@plugin "@tailwindcss/typography";
+
+/* Code block with line numbers */
+pre[data-theme="dark"],
+pre {
+  background: #0f172a !important;
+  border: 1px solid #1e293b;
+  border-radius: 0.75rem;
+  padding: 1rem 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+pre[data-theme="dark"] code,
+pre code {
+  display: block;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  background: transparent !important;
+}
+
+/* Line numbers - using line class */
+pre code .line {
+  display: block;
+  padding: 0 1rem 0 0;
+  border-left: 2px solid transparent;
+  position: relative;
+  padding-left: 3.5rem;
+}
+
+pre code .line::before {
+  content: attr(data-line);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.5rem;
+  text-align: right;
+  color: #475569;
+  user-select: none;
+  font-size: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+pre code .line:hover {
+  background: rgba(51, 65, 85, 0.3);
+  border-left-color: #10b981;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.875em;
+  border: 1px solid #334155;
+}
+
+/* Ensure code blocks in prose are styled correctly */
+.prose pre {
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  color: inherit;
+}

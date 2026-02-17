@@ -1,0 +1,538 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const exercises = await getCollection('exercises');
+  return exercises.map((exercise) => ({
+    params: { slug: exercise.slug },
+    props: { exercise },
+  }));
+}
+
+interface Props {
+  exercise: CollectionEntry<'exercises'>;
+}
+
+const { exercise } = Astro.props;
+const { Content } = await exercise.render();
+
+const { title, description, level, topik, pubDate, solution } = exercise.data;
+
+// Parse the solution markdown
+const solutionHtml = marked.parse(solution);
+---
+
+<Layout title={`${title} - Perogeremmer Reps`} description={description}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300 transition-colors">Beranda</a>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+      <span class="text-slate-400">Latihan</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-slate-800 text-slate-300 border border-slate-700">
+          {level}
+        </span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          {topik}
+        </span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">{title}</h1>
+      <p class="text-lg text-slate-400">{description}</p>
+      <div class="mt-4 text-sm text-slate-500">
+        Dipublikasikan: {pubDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </div>
+    </div>
+
+    <!-- Problem Section -->
+    <div class="prose prose-invert prose-slate max-w-none">
+      <Content />
+    </div>
+
+    <!-- Start Button Section -->
+    <div id="start-section" class="mt-12 pt-8 border-t border-slate-800">
+      <div class="text-center mb-6">
+        <h3 class="text-lg font-semibold text-slate-200 mb-2">Siap untuk mulai mengerjakan?</h3>
+        <p class="text-slate-400">Kamu punya waktu <strong class="text-emerald-400">30 menit</strong> untuk mencoba sebelum kunci jawaban terbuka. Latih logikamu tanpa bantuan AI!</p>
+      </div>
+      
+      <!-- Press and Hold Button -->
+      <div class="relative max-w-md mx-auto">
+        <button 
+          id="start-btn"
+          class="w-full relative overflow-hidden group rounded-xl"
+        >
+          <!-- Background with gradient -->
+          <div class="absolute inset-0 bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl"></div>
+          
+          <!-- Progress fill with gradient and glow -->
+          <div id="start-progress" class="absolute inset-0 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-300 origin-left scale-x-0 shadow-[0_0_30px_rgba(16,185,129,0.6)]"></div>
+          
+          <!-- Pulse effect when holding -->
+          <div id="pulse-effect" class="absolute inset-0 opacity-0 bg-emerald-400/20 rounded-xl transition-opacity duration-300"></div>
+          
+          <!-- Button content -->
+          <div class="relative z-10 flex items-center justify-center gap-3 px-8 py-5 rounded-xl border-2 border-slate-600 group-hover:border-emerald-500/30 transition-all">
+            <svg id="play-icon" class="w-6 h-6 text-emerald-400 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="btn-text" class="text-lg font-semibold text-slate-200 transition-colors duration-300">Tahan untuk Mulai</span>
+            <span id="btn-timer" class="hidden text-lg font-mono font-bold text-white drop-shadow-md">2.0s</span>
+          </div>
+          
+          <!-- Progress bar at bottom -->
+          <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-900/50 rounded-b-xl overflow-hidden">
+            <div id="bottom-progress" class="h-full bg-gradient-to-r from-emerald-400 to-emerald-200 origin-left scale-x-0 transition-transform duration-75 shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
+          </div>
+        </button>
+        
+        <p id="btn-hint" class="mt-3 text-center text-sm text-slate-500 transition-all">Tahan tombol selama 2 detik untuk mulai mengerjakan</p>
+      </div>
+      
+      <!-- Tips -->
+      <div class="mt-8 p-4 rounded-lg bg-slate-900/50 border border-slate-800">
+        <p class="text-sm text-slate-400 flex items-start gap-2">
+          <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>💡 Tips: Coba kerjakan dulu sebelum melihat solusi. Gunakan kertas atau text editor untuk menulis pseudocode.</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Warning Message (Above Solution) -->
+    <div id="warning-section" class="mt-12 pt-8 border-t border-slate-800 hidden">
+      <div class="mb-6 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+        <p class="text-amber-400/90 text-sm flex items-center gap-2 m-0">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span class="font-medium">Coba selesaikan sendiri dulu sebelum melihat solusi!</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Solution Toggle with Timer -->
+    <div id="solution-section" class="hidden" data-exercise-slug={exercise.slug}>
+      <div id="solution-lock" class="relative">
+        <!-- Locked State -->
+        <div id="locked-state" class="block">
+          <div 
+            id="solution-trigger"
+            class="relative overflow-hidden flex items-center justify-between p-4 rounded-xl bg-slate-800/80 border-2 border-slate-700 cursor-pointer hover:border-emerald-500/50 transition-all select-none"
+          >
+            <!-- Progress bar background -->
+            <div id="timer-progress" class="absolute inset-0 bg-emerald-500/10 origin-left scale-x-0 transition-transform duration-1000"></div>
+            
+            <div class="flex items-center gap-3 relative z-10">
+              <span class="flex items-center justify-center w-12 h-12 rounded-xl bg-slate-900 text-slate-400 border border-slate-700">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </span>
+              <div>
+                <span class="block text-base font-semibold text-slate-200">Kunci Jawaban Terkunci</span>
+                <span class="block text-sm text-slate-400" id="timer-text">Waktumu 30 menit. Klik cepat 3x untuk buka jawaban atau mengakhiri sesi.</span>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3 relative z-10">
+              <div class="text-right">
+                <span class="block text-xs text-slate-500 uppercase tracking-wider">Sisa Waktu</span>
+                <span id="timer-display" class="text-xl font-mono text-emerald-400 font-bold">30:00</span>
+              </div>
+              <svg class="w-6 h-6 text-emerald-500/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Click hint -->
+          <div id="click-hint" class="mt-2 text-center opacity-0 transition-opacity duration-300">
+            <span class="text-xs text-emerald-400 font-medium">Klik cepat lagi!</span>
+          </div>
+        </div>
+
+        <!-- Unlocked State -->
+        <details id="unlocked-state" class="group hidden">
+          <summary class="flex items-center justify-between p-4 rounded-xl bg-emerald-900/30 border-2 border-emerald-500/50 cursor-pointer hover:bg-emerald-900/40 transition-all list-none">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/30 text-emerald-300">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </span>
+              <div>
+                <span class="block text-base font-semibold text-emerald-200">Kunci Jawaban (Pseudocode)</span>
+                <span class="block text-sm text-emerald-400/80">Klik untuk melihat solusi dan penjelasan</span>
+              </div>
+            </div>
+            <svg class="w-6 h-6 text-emerald-400 transform group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="mt-4 p-6 rounded-xl bg-slate-900/50 border border-slate-800">
+            <div class="prose prose-invert prose-slate max-w-none">
+              <Fragment set:html={solutionHtml} />
+            </div>
+          </div>
+        </details>
+        
+        <!-- Completion Stats (shown when unlocked, outside solution) -->
+        <div id="completion-stats" class="mt-4 hidden p-4 rounded-xl bg-blue-900/20 border border-blue-500/30">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+            <div>
+              <span class="block text-sm text-blue-300 font-medium">Statistik Penyelesaian</span>
+              <span id="elapsed-display" class="text-sm text-blue-400/80">Kamu menghabiskan waktu ... untuk menyelesaikan soal ini</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Reset Button (shown when unlocked) -->
+        <div id="reset-section" class="mt-4 hidden">
+          <button 
+            id="reset-btn"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 hover:text-slate-200 transition-colors text-sm"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset Timer & Kunci Ulang
+          </button>
+          <p class="mt-2 text-xs text-slate-500">Klik untuk mengunci kembali dan mereset timer ke 30 menit</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 flex items-center justify-between">
+      <a 
+        href="/"
+        class="inline-flex items-center text-sm text-slate-400 hover:text-slate-200 transition-colors"
+      >
+        <svg class="mr-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Kembali ke daftar latihan
+      </a>
+    </div>
+  </div>
+
+  <script define:vars={{ slug: exercise.slug }}>
+    (function() {
+      const TIMER_DURATION = 30 * 60 * 1000; // 30 minutes
+      const CLICK_TIMEOUT = 500; // Time window for triple click
+      const REQUIRED_CLICKS = 3;
+      const HOLD_DURATION = 2000; // 2 seconds for press and hold
+      
+      const storageKey = `exercise_timer_${slug}`;
+      const unlockedKey = `exercise_unlocked_${slug}`;
+      const startedKey = `exercise_started_${slug}`;
+      
+      // Elements
+      const startSection = document.getElementById('start-section');
+      const warningSection = document.getElementById('warning-section');
+      const solutionSection = document.getElementById('solution-section');
+      const startBtn = document.getElementById('start-btn');
+      const startProgress = document.getElementById('start-progress');
+      const lockedState = document.getElementById('locked-state');
+      const unlockedState = document.getElementById('unlocked-state');
+      const solutionTrigger = document.getElementById('solution-trigger');
+      const timerDisplay = document.getElementById('timer-display');
+      const timerText = document.getElementById('timer-text');
+      const timerProgress = document.getElementById('timer-progress');
+      const clickHint = document.getElementById('click-hint');
+      const resetSection = document.getElementById('reset-section');
+      const resetBtn = document.getElementById('reset-btn');
+      
+      let clickCount = 0;
+      let clickTimer = null;
+      let countdownInterval = null;
+      let holdTimer = null;
+      let isHolding = false;
+      
+      // Check localStorage values
+      const isStarted = localStorage.getItem(startedKey) === 'true';
+      const isUnlocked = localStorage.getItem(unlockedKey) === 'true';
+      
+      // Show solution section (hide start, show solution)
+      function showSolutionSection() {
+        if (startSection) startSection.classList.add('hidden');
+        if (warningSection) warningSection.classList.remove('hidden');
+        if (solutionSection) solutionSection.classList.remove('hidden');
+        localStorage.setItem(startedKey, 'true');
+      }
+      
+      // Calculate and format elapsed time
+      function calculateElapsedTime() {
+        const startTime = localStorage.getItem(storageKey);
+        if (!startTime) return null;
+        
+        const elapsed = Date.now() - parseInt(startTime, 10);
+        const totalSeconds = Math.floor(elapsed / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        
+        if (minutes === 0) {
+          return `${seconds} detik`;
+        } else if (minutes === 1) {
+          return `1 menit ${seconds} detik`;
+        } else {
+          return `${minutes} menit ${seconds} detik`;
+        }
+      }
+      
+      // Show unlocked state
+      function showUnlocked() {
+        if (lockedState) lockedState.classList.add('hidden');
+        if (unlockedState) unlockedState.classList.remove('hidden');
+        if (resetSection) resetSection.classList.remove('hidden');
+        localStorage.setItem(unlockedKey, 'true');
+        
+        // Show elapsed time
+        const completionStats = document.getElementById('completion-stats');
+        const elapsedDisplay = document.getElementById('elapsed-display');
+        const elapsedTime = calculateElapsedTime();
+        if (completionStats) completionStats.classList.remove('hidden');
+        if (elapsedDisplay && elapsedTime) {
+          elapsedDisplay.textContent = `Kamu menghabiskan waktu ${elapsedTime} untuk menyelesaikan soal ini`;
+        }
+        
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+        }
+      }
+      
+      // Format time as MM:SS
+      function formatTime(ms) {
+        const totalSeconds = Math.ceil(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+      
+
+      // Start or resume timer
+      function startTimer() {
+        let startTime = localStorage.getItem(storageKey);
+        
+        if (!startTime) {
+          startTime = Date.now();
+          localStorage.setItem(storageKey, startTime);
+        } else {
+          startTime = parseInt(startTime, 10);
+        }
+        
+        function updateTimer() {
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(0, TIMER_DURATION - elapsed);
+          
+          // Update display
+          if (timerDisplay) timerDisplay.textContent = formatTime(remaining);
+          
+          // Update progress bar
+          if (timerProgress) {
+            const progress = 1 - (remaining / TIMER_DURATION);
+            timerProgress.style.transform = `scaleX(${progress})`;
+          }
+          
+          if (remaining <= 0) {
+            // Timer complete, auto unlock
+            showUnlocked();
+          }
+        }
+        
+        updateTimer();
+        countdownInterval = setInterval(updateTimer, 1000);
+      }
+      
+      // Handle press and hold for start button
+      function startHold(e) {
+        if (e.type === 'touchstart') {
+          e.preventDefault();
+        }
+        isHolding = true;
+        
+        // Visual feedback elements
+        const btnText = document.getElementById('btn-text');
+        const btnTimer = document.getElementById('btn-timer');
+        const btnHint = document.getElementById('btn-hint');
+        const pulseEffect = document.getElementById('pulse-effect');
+        const bottomProgress = document.getElementById('bottom-progress');
+        
+        // Show pulse effect
+        if (pulseEffect) pulseEffect.style.opacity = '1';
+        
+        // Change text
+        if (btnText) btnText.classList.add('hidden');
+        if (btnTimer) {
+          btnTimer.classList.remove('hidden');
+          btnTimer.textContent = '2.0s';
+        }
+        if (btnHint) {
+          btnHint.textContent = 'Tahan terus...';
+          btnHint.classList.add('text-emerald-400');
+        }
+        
+        // Start progress animation
+        if (startProgress) {
+          startProgress.style.transition = `transform ${HOLD_DURATION}ms linear`;
+          startProgress.style.transform = 'scaleX(1)';
+        }
+        if (bottomProgress) {
+          bottomProgress.style.transition = `transform ${HOLD_DURATION}ms linear`;
+          bottomProgress.style.transform = 'scaleX(1)';
+        }
+        
+        // Countdown update
+        let remaining = HOLD_DURATION;
+        const countdownInterval = setInterval(() => {
+          remaining -= 100;
+          if (btnTimer && isHolding) {
+            btnTimer.textContent = (remaining / 1000).toFixed(1) + 's';
+          }
+          if (remaining <= 0) {
+            clearInterval(countdownInterval);
+          }
+        }, 100);
+        
+        holdTimer = setTimeout(() => {
+          clearInterval(countdownInterval);
+          if (isHolding) {
+            showSolutionSection();
+            if (!isUnlocked) {
+              startTimer();
+              // Attach triple click handler after solution section shown
+              if (solutionTrigger) {
+                solutionTrigger.addEventListener('click', handleClick);
+              }
+            } else {
+              showUnlocked();
+            }
+          }
+        }, HOLD_DURATION);
+      }
+      
+      function endHold() {
+        isHolding = false;
+        clearTimeout(holdTimer);
+        
+        // Reset visual feedback
+        const btnText = document.getElementById('btn-text');
+        const btnTimer = document.getElementById('btn-timer');
+        const btnHint = document.getElementById('btn-hint');
+        const pulseEffect = document.getElementById('pulse-effect');
+        const bottomProgress = document.getElementById('bottom-progress');
+        
+        if (pulseEffect) pulseEffect.style.opacity = '0';
+        if (btnText) {
+          btnText.classList.remove('hidden');
+          btnText.classList.remove('text-emerald-900');
+        }
+        if (btnTimer) btnTimer.classList.add('hidden');
+        if (btnHint) {
+          btnHint.textContent = 'Tahan tombol selama 2 detik untuk mulai mengerjakan';
+          btnHint.classList.remove('text-emerald-400');
+        }
+        
+        // Reset progress
+        if (startProgress) {
+          startProgress.style.transition = 'transform 200ms ease-out';
+          startProgress.style.transform = 'scaleX(0)';
+        }
+        if (bottomProgress) {
+          bottomProgress.style.transition = 'transform 200ms ease-out';
+          bottomProgress.style.transform = 'scaleX(0)';
+        }
+      }
+      
+      // Handle triple click on solution trigger
+      function handleClick() {
+        clickCount++;
+        
+        // Show hint on first click
+        if (clickCount === 1 && clickHint) {
+          clickHint.classList.remove('opacity-0');
+        }
+        
+        // Visual feedback
+        if (solutionTrigger) {
+          solutionTrigger.classList.add('bg-slate-700');
+          setTimeout(() => solutionTrigger.classList.remove('bg-slate-700'), 100);
+        }
+        
+        if (clickCount >= REQUIRED_CLICKS) {
+          // Triple click achieved!
+          clearTimeout(clickTimer);
+          clickCount = 0;
+          if (clickHint) clickHint.classList.add('opacity-0');
+          showUnlocked();
+        } else {
+          // Reset click count after timeout
+          clearTimeout(clickTimer);
+          clickTimer = setTimeout(() => {
+            clickCount = 0;
+            if (clickHint) clickHint.classList.add('opacity-0');
+          }, CLICK_TIMEOUT);
+        }
+      }
+      
+      // Reset everything
+      function resetAll() {
+        localStorage.removeItem(storageKey);
+        localStorage.removeItem(unlockedKey);
+        localStorage.removeItem(startedKey);
+        location.reload();
+      }
+      
+      // Initialize based on state
+      if (isStarted) {
+        // Already started, show solution section
+        showSolutionSection();
+        if (isUnlocked) {
+          showUnlocked();
+        } else {
+          startTimer();
+          if (solutionTrigger) {
+            solutionTrigger.addEventListener('click', handleClick);
+          }
+        }
+      } else {
+        // Not started yet, attach start button listeners
+        if (startBtn) {
+          startBtn.addEventListener('mousedown', startHold);
+          startBtn.addEventListener('touchstart', startHold, { passive: false });
+          startBtn.addEventListener('mouseup', endHold);
+          startBtn.addEventListener('mouseleave', endHold);
+          startBtn.addEventListener('touchend', endHold);
+        }
+      }
+      
+      // Reset button always available
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetAll);
+      }
+    })();
+  </script>
+
+  <style>
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+</Layout>

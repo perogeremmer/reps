@@ -1,0 +1,673 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const sections = [
+  {
+    title: 'Catatan Penting',
+    icon: '⚠️',
+    isNote: true,
+    description: 'Pseudocode tidak memiliki standar baku. Beberapa hal yang perlu diketahui sebelum mulai.',
+    code: `-- Input bawaan adalah STRING, perlu konversi untuk angka
+INPUT umur_str          // menerima "20" (string)
+umur = PARSE(umur_str)  // jadi 20 (integer)
+
+-- Atau langsung (tergantung gaya yang dipakai)
+INPUT umur              // asumsikan sudah angka
+
+-- Mencetak bisa pakai OUTPUT atau PRINT
+OUTPUT "Halo"
+PRINT "Halo"
+
+-- Mencetak string + variabel
+nama = "Budi"
+PRINT "Halo " + nama        // Output: Halo Budi
+PRINT "Halo, " + nama + "!"  // Output: Halo, Budi!`,
+    output: `// Tampilan ke user saat input:
+Masukkan umur: _
+
+// User ketik: 20
+// umur_str = "20"
+// umur = 20 (setelah PARSE)
+
+Halo
+Halo
+Halo Budi
+Halo, Budi!`,
+    points: [
+      'Pseudocode = bahasa informal untuk merancang algoritma',
+      '<strong>INPUT bawaan = STRING</strong>, perlu konversi ke angka (integer/real)',
+      '<strong>OUTPUT / PRINT</strong> = sama saja, pilih yang nyaman',
+      'String bisa digabung pakai <strong>+</strong> (concatenation)',
+    ]
+  },
+  {
+    title: 'Struktur Umum',
+    icon: '📋',
+    description: 'Kerangka dasar sebuah algoritma',
+    code: `ALGORITMA HitungLuasPersegi
+  
+  // Input - catatan: bawaan itu string!
+  INPUT sisi_str
+  sisi = PARSE(sisi_str)    // konversi string ke angka
+  
+  // Proses
+  luas = sisi * sisi
+  
+  // Output
+  OUTPUT "Luas persegi: " + luas
+
+END ALGORITMA`,
+    output: `Luas persegi: 100`,
+    points: [
+      'ALGORITMA ... END ALGORITMA: Pembatas program',
+      '<strong>INPUT</strong>: Bawaan menerima <strong>string</strong>, perlu PARSE ke angka',
+      '<strong>OUTPUT / PRINT</strong>: Tampilkan hasil (bisa pakai + untuk gabung string)',
+      '// : Komentar (dilewati, gak dieksekusi)',
+    ]
+  },
+  {
+    title: 'Input & Konversi Tipe',
+    icon: '📥',
+    description: 'Cara menerima input dan mengubah tipe datanya',
+    code: `// INPUT bawaan menerima STRING
+INPUT "Masukkan nama: " nama              // "Budi" (sudah string, aman)
+INPUT "Masukkan umur: " umur_str          // "20" (masih string!)
+
+// Konversi ke angka (parsing)
+umur = PARSE(umur_str)           // "20" jadi 20 (integer)
+
+// Tampilkan hasil
+OUTPUT "Nama: " + nama
+OUTPUT "Umur: " + umur
+
+// Alternatif penulisan parsing (tergantung standar)
+// umur = TO_INTEGER(umur_str)
+// umur = INT(umur_str)
+// umur = CONVERT(umur_str, integer)`,
+    output: `Masukkan nama: Budi
+Masukkan umur: 20
+
+Nama: Budi
+Umur: 20`,
+    points: [
+      '<strong>INPUT</strong> bisa pakai <strong>prompt</strong>: INPUT "Masukkan umur: " umur',
+      '<strong>INPUT</strong> secara default menerima <strong>STRING</strong>',
+      'Gunakan <strong>PARSE()</strong> atau <strong>TO_INTEGER()</strong> untuk ubah ke angka',
+      'Kalau lupa parsing, operasi matematika bisa error: "20" + 5 = "205"',
+    ]
+  },
+  {
+    title: 'Output & String Concatenation',
+    icon: '📤',
+    description: 'Cara menampilkan output dan menggabungkan teks',
+    code: `// OUTPUT dan PRINT itu sama
+OUTPUT "Halo dunia"
+PRINT "Halo dunia"
+
+// Gabung string dengan +
+nama = "Andi"
+umur = 20
+
+PRINT "Nama: " + nama              // Output: Nama: Andi
+PRINT "Umur: " + umur              // Output: Umur: 20
+PRINT nama + " berumur " + umur    // Output: Andi berumur 20
+
+// Gabung dengan teks statis
+hasil = 100
+PRINT "Nilai akhir: " + hasil + " poin"
+// Output: Nilai akhir: 100 poin
+
+// Bisa juga pakai koma (tergantung gaya)
+PRINT "Halo", nama`,
+    output: `Halo dunia
+Halo dunia
+Nama: Andi
+Umur: 20
+Andi berumur 20
+Nilai akhir: 100 poin
+Halo Andi`,
+    points: [
+      '<strong>OUTPUT</strong> dan <strong>PRINT</strong> = fungsi sama, beda nama',
+      'Gabung string dengan operator <strong>+</strong> (concatenation)',
+      'Bisa gabung string + angka, otomatis jadi string',
+      'Beberapa gaya pakai koma , untuk pemisah output',
+    ]
+  },
+  {
+    title: 'Tipe Data',
+    icon: '📦',
+    description: 'Jenis nilai yang bisa disimpan',
+    code: `// BILANGAN BULAT (integer)
+umur = 20
+tahun = 2024
+
+// BILANGAN DESIMAL (real/float)
+tinggi = 165.5
+berat = 60.25
+pi = 3.14159
+
+// TEKS (string)
+nama = "Budi"
+alamat = 'Jakarta'
+
+// BENAR/SALAH (boolean)
+aktif = TRUE
+lulus = FALSE`,
+    output: `// umur = 20 (integer)
+// tahun = 2024 (integer)
+// tinggi = 165.5 (real)
+// berat = 60.25 (real)
+// pi = 3.14159 (real)
+// nama = "Budi" (string)
+// alamat = "Jakarta" (string)
+// aktif = TRUE (boolean)
+// lulus = FALSE (boolean)`,
+    points: [
+      '<strong>integer</strong>: Angka bulat (1, 0, -5, 100)',
+      '<strong>real</strong> atau <strong>float</strong>: Angka desimal (3.14, -0.5)',
+      '<strong>string</strong>: Teks ("hello", "123") - pakai petik',
+      '<strong>boolean</strong>: Cuma TRUE atau FALSE',
+    ]
+  },
+  {
+    title: 'Variabel & Assignment',
+    icon: '📝',
+    description: 'Cara menyimpan dan mengubah nilai',
+    code: `// Membuat variabel (memberi nilai langsung)
+nama = "Andi"
+umur = 20
+
+// Mengubah nilai (overwrite)
+umur = 21        // umur sekarang 21
+
+// Menggunakan variabel dalam operasi
+saldo = 100000
+saldo = saldo - 25000    // saldo sekarang 75000
+
+// Deklarasi dengan tipe (opsional, kalau mau formal)
+// umur integer
+// umur = 20`,
+    output: `// nama = "Andi"
+// umur = 20 → 21 (diubah)
+// saldo = 100000 → 75000 (setelah dikurangi)`,
+    points: [
+      'Variabel = tempat menyimpan data',
+      '= artinya "simpan nilai di sebelah kanan ke kiri"',
+      'Nilai bisa diubah-ubah (contoh: saldo di atas)',
+      'Deklarasi tipe opsional - pakai kalau diminta formal',
+    ]
+  },
+  {
+    title: 'Operator Aritmatika',
+    icon: '➕',
+    description: 'Operasi matematika',
+    code: `a = 10
+b = 3
+
+hasil = a + b     // Penjumlahan: 13
+hasil = a - b     // Pengurangan: 7
+hasil = a * b     // Perkalian: 30
+hasil = a / b     // Pembagian: 3.33
+hasil = a div b   // Pembagian bulat: 3
+hasil = a mod b   // Sisa bagi: 1 (10 dibagi 3 sisa 1)
+hasil = a ^ 2     // Pangkat: 100 (10 kuadrat)`,
+    output: `// hasil = 13 (10 + 3)
+// hasil = 7 (10 - 3)
+// hasil = 30 (10 * 3)
+// hasil = 3.33 (10 / 3)
+// hasil = 3 (10 div 3)
+// hasil = 1 (10 mod 3 = sisa 1)
+// hasil = 100 (10 ^ 2)`,
+    points: [
+      '+ - * / : Operasi dasar',
+      'div: Bagi ambil bulatnya saja (10 div 3 = 3)',
+      'mod: Sisa pembagian (10 mod 3 = 1)',
+      '^ : Pangkat (2 ^ 3 = 8)',
+    ]
+  },
+  {
+    title: 'Operator Perbandingan',
+    icon: '⚖️',
+    description: 'Bandingkan dua nilai, hasil TRUE/FALSE',
+    code: `x = 5
+
+// Sama dengan
+IF x == 5 THEN
+    OUTPUT "Benar, x adalah 5"
+END IF
+
+// Tidak sama dengan
+IF x != 10 THEN
+    OUTPUT "x bukan 10"
+END IF
+
+// Lebih besar & kecil
+IF x > 0 THEN
+    OUTPUT "x positif"
+END IF
+
+IF x < 100 THEN
+    OUTPUT "x kurang dari 100"
+END IF
+
+// Lebih besar sama dengan / lebih kecil sama dengan
+IF x >= 5 THEN
+    OUTPUT "x minimal 5"
+END IF`,
+    output: `Benar, x adalah 5
+x bukan 10
+x positif
+x kurang dari 100
+x minimal 5`,
+    points: [
+      '<strong>==</strong> : Sama dengan (bandingkan)',
+      '<strong>!=</strong> atau <strong><></strong> : Tidak sama dengan',
+      '<strong>></strong> : Lebih besar, <strong><</strong> : Lebih kecil',
+      '<strong>>=</strong> : Lebih besar sama dengan, <strong><=</strong> : Lebih kecil sama dengan',
+    ]
+  },
+  {
+    title: 'Operator Logika',
+    icon: '🔀',
+    description: 'Gabungkan beberapa kondisi',
+    code: `umur = 20
+status = "pelajar"
+
+// AND - Dua-duanya harus benar
+IF umur >= 17 AND umur <= 25 THEN
+    OUTPUT "Usia produktif"
+END IF
+
+// OR - Salah satu benar sudah cukup
+IF status == "pelajar" OR status == "mahasiswa" THEN
+    OUTPUT "Masih sekolah"
+END IF
+
+// NOT - Kebalikan
+IF NOT (umur < 17) THEN
+    OUTPUT "Sudah dewasa"
+END IF`,
+    output: `Usia produktif
+Masih sekolah
+Sudah dewasa`,
+    points: [
+      '<strong>AND</strong>: Dua kondisi harus TRUE',
+      '<strong>OR</strong>: Salah satu TRUE sudah cukup',
+      '<strong>NOT</strong>: Balikkan nilai (TRUE jadi FALSE)',
+      'Biasanya dipakai di IF',
+    ]
+  },
+  {
+    title: 'Kondisional (IF)',
+    icon: '🍴',
+    description: 'Ambil keputusan berdasarkan kondisi',
+    code: `nilai = 85
+
+// IF sederhana
+IF nilai >= 60 THEN
+    OUTPUT "Lulus"
+END IF
+
+// IF - ELSE (dua pilihan)
+IF nilai >= 60 THEN
+    OUTPUT "Lulus"
+ELSE
+    OUTPUT "Tidak lulus"
+END IF
+
+// IF - ELSE IF - ELSE (banyak pilihan)
+IF nilai >= 90 THEN
+    OUTPUT "Nilai A"
+ELSE IF nilai >= 80 THEN
+    OUTPUT "Nilai B"
+ELSE IF nilai >= 70 THEN
+    OUTPUT "Nilai C"
+ELSE
+    OUTPUT "Nilai D"
+END IF`,
+    output: `Lulus
+Lulus
+Nilai B`,
+    points: [
+      'IF-THEN: Paling sederhana, satu kondisi',
+      'IF-ELSE: Dua kemungkinan (iya/tidak)',
+      'ELSE IF: Banyak pilihan bertingkat',
+      'Selalu diakhiri END IF',
+    ]
+  },
+  {
+    title: 'IF Bersarang (Nested IF)',
+    icon: '🪆',
+    description: 'IF di dalam IF, untuk keputusan yang lebih kompleks',
+    code: `umur = 20
+status = "pelajar"
+
+// Cek umur dulu, baru cek status
+IF umur >= 18 THEN
+    OUTPUT "Dewasa"
+    
+    IF status == "pelajar" THEN
+        OUTPUT "Mahasiswa"
+    ELSE IF status == "kerja" THEN
+        OUTPUT "Pekerja"
+    ELSE
+        OUTPUT "Status lain"
+    END IF
+    
+ELSE
+    OUTPUT "Belum dewasa"
+END IF
+
+// Contoh lain: Cek login
+username = "admin"
+password = "12345"
+
+IF username == "admin" THEN
+    IF password == "12345" THEN
+        OUTPUT "Login berhasil"
+    ELSE
+        OUTPUT "Password salah"
+    END IF
+ELSE
+    OUTPUT "Username tidak ditemukan"
+END IF`,
+    output: `Dewasa
+Mahasiswa
+
+Login berhasil`,
+    points: [
+      'IF di dalam IF = cek kondisi bertingkat',
+      'Selesaikan IF dalam dulu, baru IF luar',
+      'Berguna untuk validasi bertahap (contoh: login)',
+      'Indentasi (spasi) penting supaya tidak bingung',
+    ]
+  },
+  {
+    title: 'Perulangan (LOOP)',
+    icon: '🔄',
+    description: 'Ulang proses beberapa kali',
+    code: `// FOR - Perulangan dengan counter
+FOR i = 1 TO 5 DO
+    OUTPUT i        // 1, 2, 3, 4, 5
+END FOR
+
+// FOR turun
+FOR i = 10 DOWNTO 1 DO
+    OUTPUT i        // 10, 9, 8, ..., 1
+END FOR
+
+// WHILE - Selama kondisi TRUE
+x = 1
+WHILE x <= 5 DO
+    OUTPUT x
+    x = x + 1       // Jangan lupa increment!
+END WHILE
+
+// REPEAT - Sampai kondisi TRUE
+y = 1
+REPEAT
+    OUTPUT y
+    y = y + 1
+UNTIL y > 5`,
+    output: `1
+2
+3
+4
+5
+
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+
+1
+2
+3
+4
+5
+
+1
+2
+3
+4
+5`,
+    points: [
+      '<strong>FOR</strong>: Perulangan pasti (tahu berapa kali)',
+      '<strong>WHILE</strong>: Cek dulu, jalankan kalau TRUE',
+      '<strong>REPEAT</strong>: Jalankan dulu, cek di akhir',
+      'Hati-hati infinite loop (lupa increment)!',
+    ]
+  },
+  {
+    title: 'Array (Larik)',
+    icon: '📚',
+    description: 'Simpan banyak data dalam satu nama. Array di sini mulai dari indeks 0 (standar modern)',
+    code: `// Deklarasi array kosong: nama = []
+nilai = []
+
+// Isi data array (mulai dari indeks 0!)
+nilai[0] = 80
+nilai[1] = 90
+nilai[2] = 75
+nilai[3] = 85
+
+// Akses satu elemen
+OUTPUT nilai[0]     // Output: 80
+OUTPUT nilai[2]     // Output: 75
+
+// Array + perulangan FOR (perhatikan indeks mulai 0!)
+FOR i = 0 TO 3 DO
+    OUTPUT "Nilai " + i + ": " + nilai[i]
+END FOR
+
+// Hitung total
+total = nilai[0] + nilai[1] + nilai[2] + nilai[3]
+OUTPUT "Total: " + total`,
+    output: `80
+75
+
+Nilai 0: 80
+Nilai 1: 90
+Nilai 2: 75
+Nilai 3: 85
+
+Total: 330`,
+    points: [
+      'Deklarasi array: <strong>nama = []</strong> (array kosong)',
+      'Array mulai dari <strong>indeks 0</strong> (standar modern)',
+      'Akses pakai [indeks], contoh: nilai[0], nilai[1]',
+      'FOR loop dengan array: dari 0 sampai (jumlah-1)',
+    ]
+  },
+  {
+    title: 'Loop + Kondisi (Kombinasi)',
+    icon: '🔁',
+    description: 'Gabungan perulangan dan kondisional',
+    code: `// Contoh 1: Cetak angka genap saja (1-10)
+FOR i = 1 TO 10 DO
+    IF i MOD 2 == 0 THEN
+        OUTPUT i    // Hanya cetak 2, 4, 6, 8, 10
+    END IF
+END FOR
+
+// Contoh 2: FizzBuzz - klasik!
+// Kelipatan 3 = Fizz, 5 = Buzz, keduanya = FizzBuzz
+FOR i = 1 TO 15 DO
+    IF i MOD 3 == 0 AND i MOD 5 == 0 THEN
+        OUTPUT "FizzBuzz"
+    ELSE IF i MOD 3 == 0 THEN
+        OUTPUT "Fizz"
+    ELSE IF i MOD 5 == 0 THEN
+        OUTPUT "Buzz"
+    ELSE
+        OUTPUT i
+    END IF
+END FOR
+
+// Contoh 3: Login dengan batas percobaan (3x)
+username = "admin"
+password = "12345"
+coba = 0
+login = FALSE
+
+WHILE coba < 3 AND login == FALSE DO
+    coba = coba + 1
+    OUTPUT "Percobaan ke-" + coba
+    
+    IF username == "admin" AND password == "12345" THEN
+        OUTPUT "Berhasil login!"
+        login = TRUE
+    ELSE
+        OUTPUT "Gagal, coba lagi"
+    END IF
+END WHILE`,
+    output: `2
+4
+6
+8
+10
+
+1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz
+
+Percobaan ke-1
+Berhasil login!`,
+    points: [
+      'Loop bisa diisi kondisi IF di dalamnya',
+      'Berguna untuk filter data (contoh: hanya cetak genap)',
+      'FizzBuzz = latihan klasik kombinasi loop + kondisi',
+      'Kombinasi ini paling sering dipakai di dunia nyata!',
+    ]
+  },
+];
+---
+
+<Layout title="Sintaks Dasar Pseudocode - Perogeremmer Reps" description="Panduan lengkap sintaks dasar pseudocode untuk pemula">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300 transition-colors">Beranda</a>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+      <span class="text-slate-400">Sintaks Dasar</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-sm text-indigo-400 mb-6">
+        <span>📖</span>
+        <span>Panduan Referensi</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">Sintaks Dasar Pseudocode</h1>
+      <p class="text-lg text-slate-400 max-w-2xl mx-auto">
+        Pelajari fondasi penulisan algoritma. Ingat: pseudocode itu <strong>flexible</strong>, 
+        yang penting logikanya jelas!
+      </p>
+    </div>
+
+    <!-- Sections -->
+    <div class="space-y-8">
+      {sections.map((section, index) => (
+        <section class={`rounded-xl overflow-hidden transition-colors ${
+          section.isNote 
+            ? 'bg-amber-500/5 border border-amber-500/20' 
+            : 'bg-slate-900/50 border border-slate-800 hover:border-slate-700'
+        }`}>
+          <div class="p-6">
+            <div class="flex items-start gap-4">
+              <span class={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl text-2xl ${
+                section.isNote ? 'bg-amber-500/20' : 'bg-slate-800'
+              }`}>
+                {section.icon}
+              </span>
+              <div class="flex-1 min-w-0">
+                <h2 class={`text-xl font-semibold mb-2 ${section.isNote ? 'text-amber-300' : 'text-slate-100'}`}>
+                  {section.title}
+                </h2>
+                <p class="text-slate-400 text-sm mb-4">{section.description}</p>
+                
+                <!-- Code Example -->
+                <div class="mb-4">
+                  <div class="text-xs text-slate-500 mb-2 uppercase tracking-wider">Contoh Kode:</div>
+                  <pre class="bg-slate-950 rounded-lg p-4 overflow-x-auto"><code set:html={section.code}></code></pre>
+                </div>
+
+                <!-- Output/Hasil Eksekusi -->
+                <div class="mb-4">
+                  <div class="text-xs text-emerald-500/80 mb-2 uppercase tracking-wider flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                    </svg>
+                    Hasil Eksekusi:
+                  </div>
+                  <pre class="bg-emerald-950/20 border border-emerald-500/20 rounded-lg p-4 overflow-x-auto"><code class="text-emerald-300/90">{section.output}</code></pre>
+                </div>
+
+                <!-- Key Points -->
+                <div class={`rounded-lg p-4 ${section.isNote ? 'bg-amber-500/10' : 'bg-slate-800/50'}`}>
+                  <div class="text-xs text-slate-500 mb-2 uppercase tracking-wider">Poin Penting:</div>
+                  <ul class="space-y-1">
+                    {section.points.map(point => (
+                      <li class="text-sm text-slate-300 flex items-start gap-2">
+                        <span class={`mt-1 ${section.isNote ? 'text-amber-400' : 'text-emerald-400'}`}>•</span>
+                        <span set:html={point}></span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-12 text-center p-8 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-xl border border-emerald-500/20">
+      <h3 class="text-lg font-semibold text-slate-100 mb-2">Siap untuk latihan?</h3>
+      <p class="text-slate-400 mb-4">Uji pemahamanmu dengan mengerjakan latihan-latihan yang tersedia</p>
+      <a 
+        href="/#exercises" 
+        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-all hover:scale-105"
+      >
+        Lihat Daftar Latihan
+        <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-12 flex items-center justify-between">
+      <a 
+        href="/"
+        class="inline-flex items-center text-sm text-slate-400 hover:text-slate-200 transition-colors"
+      >
+        <svg class="mr-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Kembali ke beranda
+      </a>
+    </div>
+  </div>
+</Layout>

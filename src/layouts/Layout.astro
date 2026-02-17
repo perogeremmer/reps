@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Perogeremmer Reps - Bangun muscle memory logikamu" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="id" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col">
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="/" class="flex items-center gap-2 group">
+            <span class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-cyan-300 transition-all">
+              Perogeremmer Reps
+            </span>
+          </a>
+          <nav class="hidden sm:flex items-center gap-6">
+            <span class="text-sm text-slate-400">Latih fundamental tanpa AI</span>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-auto">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p class="text-sm text-slate-500">
+            © 2026 Perogeremmer Reps. Built with Astro & Tailwind CSS.
+          </p>
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 rounded bg-slate-900 text-slate-500 border border-slate-800">
+              Build muscle memory
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <!-- Line numbers injection script -->
+    <script>
+      (function() {
+        function addLineNumbers() {
+          const codeBlocks = document.querySelectorAll('pre code');
+          
+          codeBlocks.forEach((codeBlock) => {
+            // Skip if already processed
+            if (codeBlock.dataset.lineNumbers) return;
+            
+            // Get raw text content (not HTML)
+            const content = codeBlock.textContent;
+            const lines = content.split('\n');
+            
+            // Remove trailing empty line
+            if (lines[lines.length - 1] === '') {
+              lines.pop();
+            }
+            
+            const wrappedLines = lines.map((line, index) => {
+              // Escape HTML entities for display
+              const escapedLine = line
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+              return `<span class="line" data-line="${index + 1}">${escapedLine || ' '}</span>`;
+            }).join('');
+            
+            codeBlock.innerHTML = wrappedLines;
+            codeBlock.dataset.lineNumbers = 'true';
+          });
+        }
+        
+        // Run on DOM ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', addLineNumbers);
+        } else {
+          addLineNumbers();
+        }
+      })();
+    </script>
+  </body>
+</html>
