@@ -2,7 +2,7 @@
 
 Platform latihan pemrograman untuk pemula yang fokus pada logika dan problem solving. Website ini berisi kumpulan soal-soal pemrograman dasar dengan fitur timer untuk membantu kamu berlatih dengan fokus.
 
-🌐 **Live Demo:** [perogeremmer-reps.pages.dev](https://perogeremmer-reps.pages.dev)
+🌐 **Live Demo:** [reps.perogeremmer.id](https://reps.perogeremmer.id)
 
 ---
 
