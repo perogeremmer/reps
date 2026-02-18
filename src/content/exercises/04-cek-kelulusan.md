@@ -10,7 +10,8 @@ solution: |
   ```
   ALGORITMA CekKelulusan
 
-  INPUT nilai_siswa
+  INPUT nilai_string
+  nilai_siswa = PARSE(nilai_string)
 
   IF nilai_siswa >= 75 THEN
       OUTPUT "Lulus"
