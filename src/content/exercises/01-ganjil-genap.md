@@ -10,7 +10,8 @@ solution: |
   ```
   ALGORITMA CekGanjilGenap
 
-  INPUT n
+  INPUT n_string
+  n = PARSE(n_string)
 
   IF n % 2 == 0 THEN
       OUTPUT "Genap"

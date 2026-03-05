@@ -10,7 +10,8 @@ solution: |
   ```
   ALGORITMA KategoriTiket
 
-  INPUT umur
+  INPUT umur_string
+  umur = PARSE(umur_string)
 
   IF umur < 12 THEN
       harga = 20000

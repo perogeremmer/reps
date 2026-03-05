@@ -10,7 +10,8 @@ solution: |
   ```
   ALGORITMA HitungDiskon
 
-  INPUT total_belanja
+  INPUT belanja_string
+  total_belanja = PARSE(belanja_string)
 
   -- Inisialisasi diskon default adalah 0
   diskon = 0
