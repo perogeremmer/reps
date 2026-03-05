@@ -38,10 +38,10 @@ solution: |
 
   ## Penjelasan
 
-  **Deret Fibonacci:** 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
-- Setiap suku adalah jumlah dua suku sebelumnya
-- Suku 1 = 0, Suku 2 = 1
-- Suku 3 = 0+1 = 1, Suku 4 = 1+1 = 2, dst
+  **Deret Fibonacci** - 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+  - Setiap suku adalah jumlah dua suku sebelumnya
+  - Suku 1 = 0, Suku 2 = 1
+  - Suku 3 = 0+1 = 1, Suku 4 = 1+1 = 2, dst
 
   1. **Inisialisasi**: Mulai dengan a=0, b=1
   2. **Tampilkan**: Cetak dua suku pertama
