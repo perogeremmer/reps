@@ -8,7 +8,7 @@ Platform latihan pemrograman untuk pemula yang fokus pada logika dan problem sol
 
 ## ✨ Fitur
 
-- **📚 Kumpulan Soal Pemrograman** - 6+ latihan dari level dasar hingga menengah
+- **📚 Kumpulan Soal Pemrograman** - 23+ latihan dari level dasar hingga lanjutan
 - **⏱️ Timer 30 Menit** - Sistem lock dengan press-and-hold (2 detik) untuk mulai
 - **💡 Solusi Tersembunyi** - Lihat solusi hanya setelah mencoba
 - **🏷️ Kategori Topik** - Setiap soal memiliki label topik (Kondisi, Variabel, Perulangan, dll)
@@ -37,12 +37,29 @@ Platform latihan pemrograman untuk pemula yang fokus pada logika dan problem sol
 │   ├── content/           # Content collections
 │   │   ├── config.ts      # Schema definisi
 │   │   └── exercises/     # Markdown files soal latihan
-│   │       ├── 01-ganjil-genap.md
-│   │       ├── 02-update-skor.md
-│   │       ├── 03-tukar-gelas.md
-│   │       ├── 04-cek-kelulusan.md
-│   │       ├── 05-kategori-tiket.md
-│   │       └── 06-diskon-belanja.md
+│   │       ├── 01-ganjil-genap.md          # Level 1: Dasar
+│   │       ├── 02-update-skor.md           # Level 1: Dasar
+│   │       ├── 03-tukar-gelas.md           # Level 1: Dasar
+│   │       ├── 04-cek-kelulusan.md         # Level 1: Dasar
+│   │       ├── 05-kategori-tiket.md        # Level 1: Dasar
+│   │       ├── 06-diskon-belanja.md        # Level 1: Dasar
+│   │       ├── 07-konversi-suhu.md         # Level 1: Dasar
+│   │       ├── 08-cek-tahun-kabisat.md     # Level 1: Dasar
+│   │       ├── 09-kalkulator-sederhana.md  # Level 1: Dasar
+│   │       ├── 10-hitung-rata-rata.md      # Level 2: Menengah
+│   │       ├── 11-tabel-perkalian.md       # Level 2: Menengah
+│   │       ├── 12-cek-bilangan-prima.md    # Level 2: Menengah
+│   │       ├── 13-segitiga-bintang.md      # Level 2: Menengah
+│   │       ├── 14-atm-sederhana.md         # Level 2: Menengah
+│   │       ├── 15-hitung-jarak.md          # Level 1: Dasar
+│   │       ├── 16-cek-positif-negatif.md   # Level 1: Dasar
+│   │       ├── 17-hitung-biaya-parkir.md   # Level 1: Dasar
+│   │       ├── 18-faktorial.md             # Level 2: Menengah
+│   │       ├── 19-deret-fibonacci.md       # Level 2: Menengah
+│   │       ├── 20-cek-palindrom.md         # Level 2: Menengah
+│   │       ├── 21-cari-max-min.md          # Level 3: Lanjutan
+│   │       ├── 22-linear-search.md         # Level 3: Lanjutan
+│   │       └── 23-bubble-sort.md           # Level 3: Lanjutan
 │   ├── layouts/           # Layout templates
 │   │   └── Layout.astro
 │   ├── pages/             # Routes
@@ -81,15 +98,15 @@ Platform latihan pemrograman untuk pemula yang fokus pada logika dan problem sol
 ---
 title: "Judul Soal"
 description: "Deskripsi singkat (max 160 char)"
-level: "Level 1: Dasar"  # atau Level 2: Menengah
+level: "Level 1: Dasar"  # Level 1: Dasar, Level 2: Menengah, atau Level 3: Lanjutan
 topik: "Kondisi (If-Else)"  # topik teknis
 pubDate: 2026-02-17
 solution: |
   ## Pseudocode
   ```
-  BEGIN
+  ALGORITMA NamaAlgoritma
     // langkah-langkah solusi
-  END
+  END ALGORITMA
   ```
 ---
 ```
@@ -120,14 +137,43 @@ npx wrangler pages deploy dist
 
 ## 🎯 Latihan yang Tersedia
 
-| No | Judul | Level | Topik |
-|:---:|-------|:-----:|-------|
-| 01 | Cek Ganjil atau Genap | ⭐ | Kondisi (If-Else) |
-| 02 | Update Skor Pemain | ⭐ | Variabel & Aritmatika |
-| 03 | Tukar Isi Gelas | ⭐ | Swap/Tukar Nilai |
-| 04 | Cek Kelulusan | ⭐⭐ | Kombinasi Kondisi |
-| 05 | Kategori Tiket | ⭐⭐ | Kondisi (If-Else) |
-| 06 | Diskon Belanja | ⭐⭐ | Diskon & Perhitungan |
+### ⭐ Level 1: Dasar (12 Latihan)
+
+| No | Judul | Topik |
+|:---:|-------|-------|
+| 01 | Cek Ganjil atau Genap | Kondisi (If-Else) |
+| 02 | Update Skor Pemain | Variabel & Aritmatika |
+| 03 | Tukar Isi Gelas | Swap/Tukar Nilai |
+| 04 | Cek Kelulusan | Kombinasi Kondisi |
+| 05 | Kategori Tiket | Kondisi (If-Else) |
+| 06 | Diskon Belanja | Diskon & Perhitungan |
+| 07 | Konversi Suhu | Variabel & Matematika |
+| 08 | Cek Tahun Kabisat | Kondisi (If-Else) |
+| 09 | Kalkulator Sederhana | Kondisi Bertingkat |
+| 15 | Hitung Jarak Tempuh | Variabel & Matematika |
+| 16 | Cek Angka Positif Negatif | Kondisi (If-Else) |
+| 17 | Hitung Biaya Parkir | Kondisi Bertingkat |
+
+### ⭐⭐ Level 2: Menengah (8 Latihan)
+
+| No | Judul | Topik |
+|:---:|-------|-------|
+| 10 | Hitung Rata-rata Nilai | Perulangan (Loop) |
+| 11 | Tabel Perkalian | Perulangan Bersarang |
+| 12 | Cek Bilangan Prima | Perulangan & Kondisi |
+| 13 | Segitiga Bintang | Perulangan Bersarang |
+| 14 | ATM Sederhana | Kombinasi Konsep |
+| 18 | Faktorial Bilangan | Perulangan (Loop) |
+| 19 | Deret Fibonacci | Perulangan (Loop) |
+| 20 | Cek Palindrom | String & Loop |
+
+### ⭐⭐⭐ Level 3: Lanjutan (3 Latihan)
+
+| No | Judul | Topik |
+|:---:|-------|-------|
+| 21 | Cari Nilai Maximum & Minimum | Array/List |
+| 22 | Linear Search | Searching Algorithm |
+| 23 | Bubble Sort | Sorting Algorithm |
 
 ---
 
